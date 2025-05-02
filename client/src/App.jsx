@@ -6,6 +6,7 @@ import { Route, Routes } from 'react-router-dom'
 import Auth from './components/auth'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const [count, setCount] = useState(0)
@@ -21,6 +22,7 @@ function App() {
         </Route>
       </Routes>
     </div>
+    <Toaster position="top-center" reverseOrder={false} />
     </>
   )
 }
