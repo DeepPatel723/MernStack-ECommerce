@@ -40,6 +40,24 @@ export const loginUser = createAsyncThunk(
     }
 )
 
+export const checkAuthUser = createAsyncThunk(
+    "auth/checkauth",
+    async () => {
+        const response = await axios.get("http://localhost:5000/api/auth/cheack-auth",
+            {
+                withCredentials: true,
+                headers: {
+                    "Cache-Control":
+                    "no-store, no-cache, must-revalidate, proxy-revalidate",    
+                  },
+            }
+        );
+
+        return response.data;
+    }
+)
+
+
 // export const registerUser = createAsyncThunk('auth/register', async (userData, { rejectWithValue }) => {
 //     try {
 //       const response = await axios.post('http://localhost:5000/api/auth/register', userData);
@@ -92,6 +110,19 @@ const authSlice = createSlice({
             state.user = action.payload.success ? action.payload.success : null
         })
         .addCase(loginUser.rejected,(state,action)=>{
+            state.isLoading = false,
+            state.isAuthenticated = false,
+            state.user = null
+        })
+        .addCase(checkAuthUser.pending,(state)=>{
+            state.isLoading = true
+        })
+        .addCase(checkAuthUser.fulfilled,(state,action)=>{
+            state.isLoading = false,
+            state.isAuthenticated = action.payload.success,
+            state.user = action.payload.success ? action.payload.success : null
+        })
+        .addCase(checkAuthUser.rejected,(state,action)=>{
             state.isLoading = false,
             state.isAuthenticated = false,
             state.user = null
